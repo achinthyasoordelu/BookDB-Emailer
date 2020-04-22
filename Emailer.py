@@ -9,7 +9,7 @@ def getQuotesFromDB():
     engine = create_engine(databaseURI)
     dbConnection = engine.connect()
     recordCount = dbConnection.execute("SELECT COUNT(*) FROM bookdb.quotes;").fetchone()[0]
-    randomQuoteIDs = [random.randrange(1, recordCount + 1) for i in range(5)] #TODO generate 5 random numbers from previous seed (last 5 numbers)/increase randomness if possible
+    randomQuoteIDs = random.sample(range(1, recordCount), 5) #TODO generate 5 random numbers from previous seed (last 5 numbers)/increase randomness if possible
     quotes = []
     for quoteID in randomQuoteIDs:
         quotes.append(dbConnection.execute("SELECT * FROM bookdb.quotes WHERE QuoteID={};".format(quoteID)).fetchone())

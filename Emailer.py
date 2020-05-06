@@ -2,6 +2,7 @@ import smtplib
 from sqlalchemy import create_engine
 import random
 from email.mime.text import MIMEText
+from datetime import datetime
 
 def getQuotesFromDB():
     #DB connect and fetch 5 random quotes
@@ -14,7 +15,6 @@ def getQuotesFromDB():
     for quoteID in randomQuoteIDs:
         quotes.append(dbConnection.execute("SELECT * FROM bookdb.quotes WHERE QuoteID={};".format(quoteID)).fetchone())
     return createEmail(quotes)
-    #return MIMEText("\n\n----------\n\n".join(quotes), "plain")
 
 def createEmail(quotes):
     quoteHTMLSkeleton = """
@@ -49,5 +49,10 @@ def sendMail(emailContent):
     server.quit()
 
 if __name__ == "__main__":
-    emailContent = getQuotesFromDB()
-    sendMail(emailContent)
+    try:
+        emailContent = getQuotesFromDB()
+        sendMail(emailContent)
+    except Exception as e:
+        log = open(str(datetime.date(datetime.now())), "w")
+        log.write("Failed to send email with exception {0}\n".format(str(e)))
+        log.close()

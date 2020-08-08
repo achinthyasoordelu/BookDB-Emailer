@@ -25,8 +25,8 @@ def createEmail(quotes):
     for quote in quotes:
         title = quote[1]
         author = quote[2]
-        quoteContent = quote[3]
-        quoteHTMLSkeletons.append(quoteHTMLSkeleton.format(title + "&mdash;" + author, quoteContent))
+        quoteContent = htmlifyQuote(quote[3])
+        quoteHTMLSkeletons.append(quoteHTMLSkeleton.format("<u>" + title + "&mdash;" + author + "</u>", quoteContent))
     return MIMEText("""
     <html>
       <head></head>
@@ -35,6 +35,12 @@ def createEmail(quotes):
       </body>
     </html>
     """.format(" ".join(quoteHTMLSkeletons)), 'html')
+
+def htmlifyQuote(quote):
+    quote = quote.replace('\n', '<br />')
+    quote = quote.replace('{', "<br /><i>")
+    quote = quote.replace('}', "</i><br />")
+    return quote
 
 def sendMail(emailContent):
     emailContent['Subject'] = "Daily Quotes"

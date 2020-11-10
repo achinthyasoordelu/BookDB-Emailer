@@ -42,8 +42,8 @@ def createEmail(affirmation, quotes):
 
 def htmlifyQuote(quote):
     quote = quote.replace('\n', '<br />')
-    quote = quote.replace('{', "<br /><i>")
-    quote = quote.replace('}', "</i><br />")
+    quote = quote.replace('{', "<i>")
+    quote = quote.replace('}', "</i>")
     return quote
 
 def sendMail(emailContent):
